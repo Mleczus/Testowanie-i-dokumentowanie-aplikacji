@@ -1,0 +1,52 @@
+Main.java:
+
+public class Main {
+    public static void main(String[] args) {
+
+        FileLogger logger = FileLogger.getInstance();
+
+        logger.log("INFO", "Uruchomiono aplikacje!");
+        logger.log("WARNING", "Wykryto podejrzanie działanie aplikacji!");
+        logger.log("ERROR", "Wykryto błąd!");
+        }
+    }
+
+
+FileLogger.java:
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.io.*;
+
+public class FileLogger {
+    private static FileLogger instance;
+
+    private FileLogger(){
+    }
+
+    public static FileLogger getInstance(){
+        if(instance == null){
+            instance = new FileLogger();
+        }
+        return instance;
+    }
+
+    public void log(String level, String message){
+        LocalDateTime curr_date = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter;
+        dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String curr_data = dateTimeFormatter.format(curr_date);
+
+        try (FileWriter fw = new FileWriter("application.log", true);
+             PrintWriter pw = new PrintWriter(fw)) {
+
+            pw.println(curr_data + " [" + level + "] " + message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+}

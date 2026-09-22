@@ -5,12 +5,13 @@ public class Main {
 
         FileLogger logger = FileLogger.getInstance();
 
-        logger.log("INFO", "Uruchomiono aplikacje!");
-        logger.log("WARNING", "Wykryto podejrzanie działanie aplikacji!");
-        logger.log("ERROR", "Wykryto błąd!");
+        logger.log(FileLogger.LogType.INFO, "Uruchomiono aplikacje!");
+        logger.log(FileLogger.LogType.WARNING, "Wykryto podejrzanie działanie aplikacji!");
+        logger.log(FileLogger.LogType.ERROR, "Wykryto błąd!");
         }
     }
 
+/////////////////////////////////////////////////////////////////////////
 
 FileLogger.java:
 
@@ -22,17 +23,23 @@ import java.io.*;
 public class FileLogger {
     private static FileLogger instance;
 
-    private FileLogger(){
+    private FileLogger() {
     }
 
-    public static FileLogger getInstance(){
-        if(instance == null){
+    public static FileLogger getInstance() {
+        if (instance == null) {
             instance = new FileLogger();
         }
         return instance;
     }
 
-    public void log(String level, String message){
+    public enum LogType {
+        INFO,
+        WARNING,
+        ERROR
+    }
+
+    public void log(LogType level, String message) {
         LocalDateTime curr_date = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter;
         dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -47,6 +54,5 @@ public class FileLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
